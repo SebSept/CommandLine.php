@@ -174,4 +174,11 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $result = CommandLine::parseArgs(array());
         $this->assertEquals(1, count($result));
     }
+
+    /** @test */
+    public function undefinedArg()
+    {
+        $result = CommandLine::parseArgs(array(self::FILE));
+        $this->assertNull($result['doesnotexist']);
+    }
 }

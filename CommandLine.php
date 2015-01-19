@@ -142,7 +142,7 @@ class CommandLine
 
         self::$args                     = $out;
 
-        return $out;
+        return new CommandLineResult($out);
     }
 
     /**
@@ -188,5 +188,56 @@ class CommandLine
         }
 
         return $default;
+    }
+}
+
+class CommandLineResult implements ArrayAccess, countable
+{
+    protected $values = array();
+
+    public function __construct(array $values = array())
+    {
+        $this->values = $values;
+    }
+
+    /**
+    * @return bool
+    */
+    public function offsetExists ($offset)
+    {
+        return array_key_exists($offset, $this->values);
+    }
+
+    /**
+    * @return mixed 
+    */
+    public function offsetGet ($offset)
+    {
+        if(!$this->offsetExists($offset))
+        {
+            return null;
+        }
+        return $this->values[$offset];
+    }
+
+    /**
+    * @return void
+    */
+    public function offsetSet($offset , $value )
+    {
+        $this->values[$offset] = $value;
+    }
+
+    /**
+    * @return void
+    */
+    public function offsetUnset( $offset )
+    {
+        unset($this->values[$offset]);
+    }
+
+    public function count()
+    {
+        return count($this->values);
     }
 }
